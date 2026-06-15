@@ -275,7 +275,7 @@ class SequelizeDB extends DB {
 			if (new_expiry !== undefined) {
 				await (
 					await this.UserToken.findByPk(token)
-				)?.update({ expires: new_expiry.toString() });
+				)?.update({ expires: new_expiry.toISOString() });
 			}
 		} catch (e: unknown) {}
 
@@ -331,7 +331,7 @@ class SequelizeDB extends DB {
 				{
 					user: email,
 					token: user_token,
-					expires: expires.toString(),
+					expires: expires.toISOString(),
 				},
 				{ transaction },
 			);
