@@ -18,7 +18,7 @@ export async function up(queryInterface, Sequelize) {
 			onUpdate: "CASCADE",
 		},
 		expires: {
-			type: DataTypes.DATE,
+			type: DataTypes.TEXT,
 			allowNull: false,
 		},
 	});

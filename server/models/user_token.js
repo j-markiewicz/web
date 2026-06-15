@@ -16,7 +16,7 @@ export default (sequelize, DataTypes) => {
 			onUpdate: "CASCADE",
 		},
 		expires: {
-			type: DataTypes.DATE,
+			type: DataTypes.TEXT,
 			allowNull: false,
 		},
 	});
