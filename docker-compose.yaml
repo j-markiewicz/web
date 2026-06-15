@@ -1,0 +1,97 @@
+name: transit-map
+
+volumes:
+  traefik-certs:
+  transit-map-db:
+
+networks:
+  transit-map:
+
+services:
+  # Backend server
+  server:
+    build:
+      context: ./server/
+    restart: always
+    networks:
+      - transit-map
+    environment:
+      - PORT=8000
+      - DB=postgresql://transitmap:password@postgres/transitmap
+      - NODE_ENV=production
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.rule=Host(`${HOST}`) && PathRegexp(`^/(api|auth)`)
+      - traefik.http.routers.backend.entrypoints=https
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=letsencrypt
+      - traefik.http.routers.backend.tls.domains[0].main=${HOST}
+      - traefik.http.services.backend.loadbalancer.server.port=8000
+
+  # Website frontend
+  website:
+    build:
+      context: ./website/
+      args:
+        - VITE_MAP_API_BASE=http://localhost/api/
+        - VITE_MAP_AUTH_BASE=http://localhost/auth/
+    restart: always
+    networks:
+      - transit-map
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.frontend.rule=Host(`${HOST}`)
+      - traefik.http.routers.frontend.entrypoints=https
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.tls.certresolver=letsencrypt
+      - traefik.http.routers.frontend.tls.domains[0].main=${HOST}
+      - traefik.http.services.frontend.loadbalancer.server.port=80
+
+  # PostgreSQL database
+  postgres:
+    image: postgres:18
+    restart: always
+    environment:
+      - POSTGRES_USER=transitmap
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - transit-map-db:/var/lib/postgresql
+    networks:
+      - transit-map
+
+  # Traefik reverse proxy
+  traefik:
+    image: traefik:v3.7
+    restart: always
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    volumes:
+      - traefik-certs:/certs
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - transit-map
+    environment:
+      - "${TRAEFIK_DNS_PROVIDER_API_KEY_NAME}=${TRAEFIK_DNS_PROVIDER_API_KEY}"
+    command:
+      - "--log.level=INFO"
+      - "--accesslog=false"
+      - "--metrics.prometheus=false"
+      - "--api.dashboard=false"
+      - "--api.insecure=false"
+      - "--global.checkNewVersion=true"
+      - "--global.sendAnonymousUsage=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.http.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.https.address=:443"
+      - "--entrypoints.https.http.tls=true"
+      - "--entrypoints.https.http.tls.certResolver=letsencrypt"
+      - "--entrypoints.https.http.tls.domains[0].main=${HOST}"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--certificatesResolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge=true"
+      - "--certificatesResolvers.letsencrypt.acme.dnsChallenge.provider=${ACME_DNS_PROVIDER}"
+      - "--certificatesResolvers.letsencrypt.acme.storage=/certs/certs.json"
