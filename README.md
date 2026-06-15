@@ -35,7 +35,8 @@ Domyślnie, cache jest automatycznie wypełniany i odświeżany przez serwer - m
 Projekt można uruchomić używając [`docker compose`](https://docs.docker.com/compose/):
 
 1. Stworzyć plik konfiguracyjny `.env` na podstawie [`.env.example`](./.env.example) i wypełnić odpowiednio pola
-1. Zbudować kontenery przy użyciu `docker compose build`
+1. *(po zmianach kodu źródłowego)* Zbudować kontenery przy użyciu `docker compose build`
+1. *(przy pierwszym uruchomieniu bazy danych)* Uruchomić tylko kontener Postgresa przy użyciu `docker compose up postgres` i stworzenie bazy danych przy użyciu `sudo docker compose run --env NODE_ENV=production --env DB=postgresql://transitmap:password@postgres/transitmap server npm run migrate` i opcjonalnie dodanie do bazy danych przykładowych przy użyciu `sudo docker compose run --env NODE_ENV=production --env DB=postgresql://transitmap:password@postgres/transitmap server npm run seed`
 1. Uruchomić kontenery przy użyciu `docker compose up`
 
 [`docker-compose.yaml`](./docker-compose.yaml) ma zdefiniowaną serwer backendowy, serwer dla frontendu (nginx), bazę danych (PostgreSQL), i reverse proxy (traefik; dzięki któremu certyfikaty TLS mogą być automatycznie stwarzane).
