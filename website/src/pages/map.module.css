@@ -1,0 +1,35 @@
+.wrapper {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 1fr;
+	grid-template-areas: "sidebar map";
+	width: 100vw;
+	width: 100dvw;
+	height: 100vh;
+	height: 100dvh;
+}
+
+.sidebar {
+	grid-area: sidebar;
+	width: 25vw;
+	width: 25dvw;
+	overflow: hidden;
+	z-index: 1000000;
+	box-shadow: 0 0 1rem #00000075;
+}
+
+.map {
+	grid-area: map;
+	cursor: default;
+	outline: none;
+	width: 75vw;
+	width: 75dvw;
+}
+
+.map:active {
+	cursor: grabbing;
+}
+
+.vehicle {
+	background: none;
+}

@@ -1,0 +1,228 @@
+.wrapper {
+	max-height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	flex-shrink: 0;
+	background-color: var(--bg-color);
+	align-items: center;
+	justify-content: flex-start;
+	gap: 1rem;
+	padding: 1rem;
+	margin: 0;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	scrollbar-width: thin;
+	text-wrap: nowrap;
+	z-index: 1000001;
+}
+
+.back {
+	cursor: pointer;
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.backicon {
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.refresh {
+	cursor: pointer;
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.refreshicon {
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.locate {
+	cursor: pointer;
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.locateicon {
+	height: 2rem;
+	margin: 0;
+	padding: 0;
+}
+
+.name {
+	text-align: center;
+	margin: 0 auto;
+}
+
+.tabs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto 1fr;
+	grid-template-areas: ". ." "lines lines" "content content";
+	flex-shrink: 1;
+	overflow-y: hidden;
+}
+
+.tab {
+	text-align: center;
+	height: 1.5rem;
+	border-radius: 1rem 1rem 0 0;
+	border: 1px var(--fg-color) solid;
+}
+
+.tab.current {
+	border-bottom: none;
+	font-weight: bold;
+}
+
+.tab:not(.current):hover {
+	cursor: pointer;
+	background-color: var(--bg-grey);
+}
+
+.lines {
+	grid-area: lines;
+	z-index: 1000002;
+	display: flex;
+	flex-shrink: 0;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	scrollbar-width: none;
+	align-items: center;
+	height: 2rem;
+	padding: 0.5rem;
+	margin: 0;
+}
+
+.line {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.8rem;
+	height: 1.5rem;
+	border-radius: 0.75rem;
+	border: 1px var(--fg-color) solid;
+	padding: 0 1ch;
+	margin: 0.25rem;
+}
+
+.line:hover {
+	cursor: pointer;
+	background-color: var(--bg-grey);
+}
+
+.selectedline {
+	font-weight: bold;
+	border-width: 2px;
+}
+
+.nonselectedline {
+	color: var(--fg-grey);
+	border-color: var(--fg-grey);
+}
+
+.content {
+	grid-area: content;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	overflow-y: scroll;
+	scrollbar-width: thin;
+	margin: 0 0 1rem 0;
+}
+
+.date {
+	margin: 0 0.5rem;
+	padding: 0.5rem;
+	font-weight: bold;
+	position: sticky;
+	top: 0;
+	background-color: var(--bg-color);
+	z-index: 1000003;
+	box-shadow: 0 0 1rem 0.5rem var(--bg-color);
+}
+
+.schedule {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin: 0 0.5rem;
+	padding: 0.5rem;
+	border-radius: 1rem;
+}
+
+.schedule:hover {
+	cursor: pointer;
+	background-color: var(--bg-grey);
+}
+
+#now {
+	margin: 0 1rem;
+}
+
+.schedulewrapper {
+	display: block;
+	margin: 0.5rem 1rem;
+}
+
+.scheduleheader {
+	margin: 0.5rem 0;
+	padding: 0;
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+
+.scheduletable {
+	overflow-x: scroll;
+}
+
+.scheduletable > table {
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+.scheduletable td,
+.scheduletable th {
+	border: 1px var(--fg-grey) solid;
+	border-radius: 0.5rem;
+}
+
+.scheduletable > table > thead > th {
+	text-align: center;
+}
+
+.scheduletable > table > tbody th {
+	position: sticky;
+	padding: 0.1rem 0.5ch;
+	left: -1px;
+	background-color: var(--bg-color);
+}
+
+.scheduletable > table > tbody > tr > td > span {
+	padding: 0.1rem 0.5ch;
+}
+
+.noteheading {
+	margin: 0;
+	padding: 0.1rem 1rem;
+	font-size: 1rem;
+	font-weight: bold;
+}
+
+.note {
+	margin: 0;
+	padding: 0 1rem;
+}
